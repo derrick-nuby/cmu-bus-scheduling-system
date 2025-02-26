@@ -15,17 +15,48 @@ L.Icon.Default.mergeOptions({
 export default function MapComponent() {
   const [position, setPosition] = useState<[number, number] | null>(null);
 
+  const logLocation = (pos: GeolocationPosition) => {
+    const location: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+    setPosition(location);
+
+    const now = new Date();
+    const humanReadableTime = now.toLocaleString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+
+    const logData = {
+      time: humanReadableTime,
+      location: {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      },
+    };
+
+    console.log(JSON.stringify(logData, null, 2));
+  };
+
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setPosition([pos.coords.latitude, pos.coords.longitude]);
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-        // Set a default position if geolocation fails
-        setPosition([51.505, -0.09]);
-      },
-    );
+    const intervalId = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(
+        logLocation,
+        (error) => {
+          console.error("Error getting location:", error);
+          // Set a default position if geolocation fails
+          setPosition([51.505, -0.09]);
+        }
+      );
+    }, 50000); // 50 seconds
+
+    // Initial call to set the position
+    navigator.geolocation.getCurrentPosition(logLocation);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   if (!position) {
