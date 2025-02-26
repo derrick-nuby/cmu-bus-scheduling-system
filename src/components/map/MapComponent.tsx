@@ -151,6 +151,11 @@ export default function MapComponent() {
             </DrawerContent>
           </Drawer>
         </div>
+
+        <div className="absolute bottom-4 left-4 z-[1000]">
+          <Button variant="outline" className="bg-white shadow-md">Share Location</Button>
+
+        </div>
       </div>
     </div>
   );
