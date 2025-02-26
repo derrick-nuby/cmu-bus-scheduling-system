@@ -1,7 +1,10 @@
-import MapComponent from '@/components/map/MapComponent';
-import React from 'react';
+'use client';
 
-export default function page() {
+import dynamic from 'next/dynamic';
+
+const MapComponent = dynamic(() => import('@/components/map/MapComponent'), { ssr: false });
+
+export default function Page() {
   return (
     <>
       <MapComponent />
