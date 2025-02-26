@@ -51,7 +51,7 @@ export default function MapComponent() {
           setPosition([51.505, -0.09]);
         }
       );
-    }, 50000); // 50 seconds
+    }, 60000); // 60 seconds
 
     // Initial call to set the position
     navigator.geolocation.getCurrentPosition(logLocation);
