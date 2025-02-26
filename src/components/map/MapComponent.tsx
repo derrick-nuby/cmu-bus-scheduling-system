@@ -99,51 +99,59 @@ export default function MapComponent() {
   }
 
   return (
-    <div className="h-screen w-full relative">
-      <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={position}>
-          <Popup>You are here</Popup>
-        </Marker>
-      </MapContainer>
-      <div className="absolute bottom-4 right-4 z-[1000]">
-        <Drawer>
-          <DrawerTrigger asChild>
-            <Button variant="outline">View Location History</Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Location History</DrawerTitle>
-                <DrawerDescription>Your recent location data</DrawerDescription>
-              </DrawerHeader>
-              <ScrollArea className="h-[50vh] px-4">
-                <div className="space-y-4 pr-4">
-                  {locationHistory
-                    .slice()
-                    .reverse()
-                    .map((entry, index) => (
-                      <div key={index} className="border-b pb-2">
-                        <p className="font-semibold">{entry.time}</p>
-                        <p>Latitude: {entry.location.latitude.toFixed(6)}</p>
-                        <p>Longitude: {entry.location.longitude.toFixed(6)}</p>
-                      </div>
-                    ))}
-                </div>
-              </ScrollArea>
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </div>
-          </DrawerContent>
-        </Drawer>
+    <div className="h-screen w-full flex flex-col">
+      {/* Map container now taking up full available space but not positioned relatively */}
+      <div className="flex-grow relative">
+        <MapContainer
+          center={position}
+          zoom={13}
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={position}>
+            <Popup>You are here</Popup>
+          </Marker>
+        </MapContainer>
+
+        {/* Button positioned over the map */}
+        <div className="absolute bottom-4 right-4 z-[1000]">
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline" className="bg-white shadow-md">View Location History</Button>
+            </DrawerTrigger>
+            <DrawerContent className="z-[2000]">
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>Location History</DrawerTitle>
+                  <DrawerDescription>Your recent location data</DrawerDescription>
+                </DrawerHeader>
+                <ScrollArea className="h-[50vh] px-4">
+                  <div className="space-y-4 pr-4">
+                    {locationHistory
+                      .slice()
+                      .reverse()
+                      .map((entry, index) => (
+                        <div key={index} className="border-b pb-2">
+                          <p className="font-semibold">{entry.time}</p>
+                          <p>Latitude: {entry.location.latitude.toFixed(6)}</p>
+                          <p>Longitude: {entry.location.longitude.toFixed(6)}</p>
+                        </div>
+                      ))}
+                  </div>
+                </ScrollArea>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
       </div>
     </div>
   );
 }
-
