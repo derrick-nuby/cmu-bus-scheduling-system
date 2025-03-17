@@ -1,8 +1,9 @@
 // problems
 // pause tracking and share location and view location history are not showing in mobile, fix it
 
-
 "use client";
+
+import { DrawerFooter } from "@/components/ui/drawer";
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
@@ -14,7 +15,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -167,61 +167,62 @@ export default function MapComponent() {
           <MapUpdater position={position} />
         </MapContainer>
 
-        {/* Controls positioned over the map */}
-        <div className="absolute bottom-4 right-4 z-[1000]">
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline" className="bg-white shadow-md">
-                View Location History
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent className="z-[2000]">
-              <div className="mx-auto w-full max-w-sm">
-                <DrawerHeader>
-                  <DrawerTitle>Location History</DrawerTitle>
-                  <DrawerDescription>Your recent location data</DrawerDescription>
-                </DrawerHeader>
-                <ScrollArea className="h-[50vh] px-4">
-                  <div className="space-y-4 pr-4">
-                    {locationHistory
-                      .slice()
-                      .reverse()
-                      .map((entry, index) => (
-                        <div key={index} className="border-b pb-2">
-                          <p className="font-semibold">{entry.time}</p>
-                          <p>Latitude: {entry.location.latitude.toFixed(6)}</p>
-                          <p>Longitude: {entry.location.longitude.toFixed(6)}</p>
-                        </div>
-                      ))}
-                  </div>
-                </ScrollArea>
-                <DrawerFooter>
-                  <DrawerClose asChild>
-                    <Button variant="outline">Close</Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </div>
-            </DrawerContent>
-          </Drawer>
-        </div>
+        {/* Mobile-friendly controls positioned at the bottom of the map */}
+        <div className="absolute bottom-4 left-0 right-0 z-[1000] px-4">
+          <div className="flex flex-col sm:flex-row gap-2 w-full justify-center">
+            <Button
+              variant="outline"
+              className="bg-white shadow-md w-full sm:w-auto"
+              onClick={() => {
+                if (isTracking) {
+                  stopTracking();
+                } else {
+                  startTracking();
+                }
+              }}
+            >
+              {isTracking ? "Pause Tracking" : "Resume Tracking"}
+            </Button>
 
-        <div className="absolute bottom-4 left-4 z-[1000] flex space-x-2">
-          <Button
-            variant="outline"
-            className="bg-white shadow-md"
-            onClick={() => {
-              if (isTracking) {
-                stopTracking();
-              } else {
-                startTracking();
-              }
-            }}
-          >
-            {isTracking ? "Pause Tracking" : "Resume Tracking"}
-          </Button>
-          <Button variant="outline" className="bg-white shadow-md">
-            Share Location
-          </Button>
+            <Button variant="outline" className="bg-white shadow-md w-full sm:w-auto">
+              Share Location
+            </Button>
+
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button variant="outline" className="bg-white shadow-md w-full sm:w-auto">
+                  View Location History
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="z-[2000]">
+                <div className="mx-auto w-full max-w-sm">
+                  <DrawerHeader>
+                    <DrawerTitle>Location History</DrawerTitle>
+                    <DrawerDescription>Your recent location data</DrawerDescription>
+                  </DrawerHeader>
+                  <ScrollArea className="h-[50vh] px-4">
+                    <div className="space-y-4 pr-4">
+                      {locationHistory
+                        .slice()
+                        .reverse()
+                        .map((entry, index) => (
+                          <div key={index} className="border-b pb-2">
+                            <p className="font-semibold">{entry.time}</p>
+                            <p>Latitude: {entry.location.latitude.toFixed(6)}</p>
+                            <p>Longitude: {entry.location.longitude.toFixed(6)}</p>
+                          </div>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Close</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
       </div>
     </div>
