@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrganizationType {
+  COMPANY
+  EVENT
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ORG_ADMIN
+}
+
+enum BusStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PassengerStatus {
+  WAITING
+  BOARDED
+  LEFT
+}
+
+model Organization {
+  id         String   @id @default(cuid())
+  name       String
+  type       OrganizationType
+  domain     String?  
+  createdAt  DateTime @default(now())
+  users      User[]
+  routes     Route[]
+}
+
+model User {
+  id              String         @id @default(cuid())
+  organization    Organization?  @relation(fields: [organizationId], references: [id])
+  organizationId  String?        
+  email           String         @unique
+  password        String
+  name            String
+  role            UserRole
+  oauthProvider   String?        // e.g., "google"
+  oauthId         String?        // OAuth provider unique id
+  createdAt       DateTime       @default(now())
+}
+
+model Route {
+  id             String            @id @default(cuid())
+  organization   Organization      @relation(fields: [organizationId], references: [id])
+  organizationId String
+  name           String
+  description    String
+  code           String            @unique
+  logo           String?
+  createdAt      DateTime          @default(now())
+  buses          Bus[]
+  busStops       BusStop[]
+  passengers     Passenger[]
+  liveTrackings  BusLiveTracking[]
+}
+
+model Bus {
+  id                String            @id @default(cuid())
+  route             Route             @relation(fields: [routeId], references: [id])
+  routeId           String
+  name              String
+  plateNumber       String
+  capacity          Int
+  locationLatitude  Float?            // Updated via passenger tracking if no dedicated GPS device
+  locationLongitude Float?
+  status            BusStatus
+  liveTrackings     BusLiveTracking[]
+  passengers        Passenger[]
+}
+
+model BusStop {
+  id         String   @id @default(cuid())
+  route      Route    @relation(fields: [routeId], references: [id])
+  routeId    String
+  name       String
+  latitude   Float
+  longitude  Float
+  busLeft    Boolean  // Indicates whether the bus has left the stop
+  createdAt  DateTime @default(now())
+}
+
+model Passenger {
+  id                String            @id @default(cuid())
+  route             Route             @relation(fields: [routeId], references: [id])
+  routeId           String
+  bus               Bus?              @relation(fields: [busId], references: [id])
+  busId             String?
+  nickname          String
+  status            PassengerStatus
+  waitingLatitude   Float?            // When the passenger is waiting
+  waitingLongitude  Float?
+  onboardLatitude   Float?            // When the passenger is onboard and used to track the bus
+  onboardLongitude  Float?
+  createdAt         DateTime          @default(now())
+  liveTrackings     BusLiveTracking[]
+}
+
+model BusLiveTracking {
+  id           String    @id @default(cuid())
+  bus          Bus       @relation(fields: [busId], references: [id])
+  busId        String
+  route        Route     @relation(fields: [routeId], references: [id])
+  routeId      String
+  passenger    Passenger  @relation(fields: [passengerId], references: [id])
+  passengerId  String
+  latitude     Float
+  longitude    Float
+  updatedAt    DateTime  @default(now())
+}
