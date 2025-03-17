@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CMU BUS SCHEDULING SYSTEM
 
-## Getting Started
+This is a **bus tracking system** with **passenger status, bus stops, and route updates**. Below is my database schema:
 
-First, run the development server:
+## **Database Schema**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### **1️⃣ Passengers Table**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Column Name         | Type                          | Description                                                       |
+| ------------------- | ----------------------------- | ----------------------------------------------------------------- |
+| `id`                | UUID                          | Unique passenger ID.                                              |
+| `route_id`          | UUID                          | Links to the route.                                               |
+| `bus_id`            | UUID                          | The bus they are waiting for or onboard.                          |
+| `nickname`          | String                        | Randomly generated or user-entered name.                          |
+| `status`            | Enum (Waiting, Boarded, Left) | **New** - Whether they are waiting, boarded, or left.             |
+| `waiting_latitude`  | Float                         | **New** - Passenger's waiting location (latitude).                |
+| `waiting_longitude` | Float                         | **New** - Passenger's waiting location (longitude).               |
+| `onboard_latitude`  | Float                         | **New** - Used if they are on the bus (acts as a moving tracker). |
+| `onboard_longitude` | Float                         | **New** - Used if they are on the bus (acts as a moving tracker). |
+| `created_at`        | Timestamp                     | When they joined the system.                                      |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🔹 **Logic**:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- If `status = "Waiting"`, use `waiting_latitude` & `waiting_longitude` to track them.
+- If `status = "Boarded"`, use `onboard_latitude` & `onboard_longitude` to track bus location.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### **2️⃣ Bus Stops Table**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Column Name  | Type      | Description                                  |
+| ------------ | --------- | -------------------------------------------- |
+| `id`         | UUID      | Unique stop ID.                              |
+| `route_id`   | UUID      | Links to the route.                          |
+| `name`       | String    | Stop name (e.g., "Main Street").             |
+| `latitude`   | Float     | GPS latitude.                                |
+| `longitude`  | Float     | GPS longitude.                               |
+| `bus_left`   | Boolean   | **New** - True if the bus has left the stop. |
+| `created_at` | Timestamp | When the stop was created.                   |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🔹 **Logic**:
 
-## Deploy on Vercel
+- When a bus reaches a stop, it sets `bus_left = false`.
+- When a bus departs, it sets `bus_left = true`.
+- A **backend reset** will clear this when a new bus arrives.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### **3️⃣ Bus Live Tracking Table (New)**
+
+| Column Name    | Type      | Description                                      |
+| -------------- | --------- | ------------------------------------------------ |
+| `id`           | UUID      | Unique tracking ID.                              |
+| `bus_id`       | UUID      | The bus being tracked.                           |
+| `route_id`     | UUID      | Links to the route.                              |
+| `passenger_id` | UUID      | **New** - The passenger providing location data. |
+| `latitude`     | Float     | Live GPS latitude.                               |
+| `longitude`    | Float     | Live GPS longitude.                              |
+| `updated_at`   | Timestamp | Last updated timestamp.                          |
+
+🔹 **Logic**:
+
+- If a **passenger is inside a bus**, their location is used to track the bus.
+- The most **recently updated location** is used for the bus's position.
+- This **replaces the need for a GPS device on the bus**.
+
+## **How the System Works**
+
+1. **Passengers enter waiting status**
+
+   - They select their **waiting location** (via GPS or manual selection).
+   - Their `status` is marked as `"Waiting"`.
+
+2. **Bus arrives at a stop**
+
+   - Passengers **board**, and their `status` is updated to `"Boarded"`.
+   - The stop’s `bus_left` field is set to `false`.
+
+3. **Bus departs**
+
+   - When a bus leaves a stop, the `bus_left` field is set to `true`.
+
+4. **Passenger as Bus Tracker**
+
+   - A **passenger inside the bus** acts as the **bus GPS device**.
+   - Their location is used in the **Bus Live Tracking Table**.
+
+5. **System resets for new buses**
+   - The backend clears `bus_left` when a **new bus starts the route**.
+
+---
+
+## **Final Notes**
+
+✅ **Scalability:** Works for multiple cities & transport companies.  
+✅ **No GPS hardware needed:** Passengers **inside the bus** act as live location trackers.  
+✅ **Data cleanup:** `waiting_latitude` & `waiting_longitude` **are cleared** once a passenger boards.
+
+---
