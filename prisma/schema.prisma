@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ORG_ADMIN
+}
+
+enum OrganizationType {
+  COMPANY
+  EVENT
+}
+
+enum BusStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PassengerStatus {
+  WAITING
+  BOARDED
+  LEFT
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password       String?
+  name           String
+  role           UserRole
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  oauthProvider  String?
+  oauthId        String?
+  resetCode      String?   // Added for password reset
+  resetExpires   DateTime? // Added for password reset expiration
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Organization {
+  id        String           @id @default(uuid())
+  name      String
+  type      OrganizationType
+  domain    String?
+  users     User[]
+  routes    Route[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model Route {
+  id             String          @id @default(uuid())
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  name           String
+  description    String
+  code           String          @unique
+  logo           String?
+  buses          Bus[]
+  busStops       BusStop[]
+  passengers     Passenger[]
+  liveTracking   BusLiveTracking[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Bus {
+  id                String          @id @default(uuid())
+  routeId           String
+  route             Route           @relation(fields: [routeId], references: [id])
+  name              String
+  plateNumber       String
+  capacity          Int
+  status            BusStatus
+  locationLatitude  Float?
+  locationLongitude Float?
+  passengers        Passenger[]
+  liveTracking      BusLiveTracking[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model BusStop {
+  id        String   @id @default(uuid())
+  routeId   String
+  route     Route    @relation(fields: [routeId], references: [id])
+  name      String
+  latitude  Float
+  longitude Float
+  busLeft   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Passenger {
+  id                String           @id @default(uuid())
+  routeId           String
+  route             Route            @relation(fields: [routeId], references: [id])
+  busId             String?
+  bus               Bus?             @relation(fields: [busId], references: [id])
+  nickname          String
+  status            PassengerStatus
+  waitingLatitude   Float?
+  waitingLongitude  Float?
+  onboardLatitude   Float?
+  onboardLongitude  Float?
+  liveTracking      BusLiveTracking[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+}
+
+model BusLiveTracking {
+  id          String    @id @default(uuid())
+  busId       String
+  bus         Bus       @relation(fields: [busId], references: [id])
+  routeId     String
+  route       Route     @relation(fields: [routeId], references: [id])
+  passengerId String
+  passenger   Passenger @relation(fields: [passengerId], references: [id])
+  latitude    Float
+  longitude   Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+

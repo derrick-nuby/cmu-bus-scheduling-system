@@ -1,0 +1,1188 @@
+{
+  "info": {
+    "_postman_id": "8a6fd8a3-8475-4484-85b8-d0a9f7dca887",
+    "name": "CMU Bus Scheduling System",
+    "description": "A real-time bus tracking system designed to help users track the location of buses in real time. It aims to provide accurate and timely information about bus locations, making it easier for passengers and stakeholders to plan their journeys effectively.\n\nMy project bridges the gap between unreliable bus systems and real-time GPS tracking. By ensuring continuous location updates, it enhances the public transport experience, reduces delays, and provides valuable insights for both passengers and bus operators.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "24842410"
+  },
+  "item": [
+    {
+      "name": "Organizations",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/organizations",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            },
+            "description": "Creates a new organization (company or event)",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Example Organization\",\n  \"type\": \"COMPANY\",\n  \"domain\": \"example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Organizations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/organizations",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            },
+            "description": "Retrieves a list of all organizations"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Organization by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/organizations/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "organizations",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific organization"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Organization",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/organizations/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "organizations",
+                ":id"
+              ]
+            },
+            "description": "Updates an organization's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Organization Name\",\n  \"domain\": \"updated-example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Organization",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/organizations/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "organizations",
+                ":id"
+              ]
+            },
+            "description": "Deletes an organization"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing organizations (companies or events)"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users/signup",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users",
+                "signup"
+              ]
+            },
+            "description": "Registers a new user account",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"name\": \"John Doe\",\n  \"role\": \"ORG_ADMIN\",\n  \"organizationId\": \"org123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users/login",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            },
+            "description": "Authenticates a user and returns a JWT token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Retrieves a list of all users"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific user"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ]
+            },
+            "description": "Updates a user's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"role\": \"ORG_ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/users/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ]
+            },
+            "description": "Deletes a user account"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for user management and authentication"
+    },
+    {
+      "name": "Routes",
+      "item": [
+        {
+          "name": "Create Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes"
+              ]
+            },
+            "description": "Creates a new route for a given organization",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"org123\",\n  \"name\": \"Campus Shuttle\",\n  \"description\": \"Route between main campus and residence halls\",\n  \"code\": \"CAMPUS01\",\n  \"logo\": \"https://example.com/logo.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Routes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes"
+              ]
+            },
+            "description": "Retrieves a list of all routes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Routes by Organization",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes?organizationId=org123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes?organizationId=org123"
+              ]
+            },
+            "description": "Retrieves routes for a specific organization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Route by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific route"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Route",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes",
+                ":id"
+              ]
+            },
+            "description": "Updates a route's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Route Name\",\n  \"description\": \"Updated route description\",\n  \"logo\": \"https://example.com/updated-logo.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Route",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/routes/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "routes",
+                ":id"
+              ]
+            },
+            "description": "Deletes a route"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing bus routes"
+    },
+    {
+      "name": "Buses",
+      "item": [
+        {
+          "name": "Create Bus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses"
+              ]
+            },
+            "description": "Creates a new bus for a specific route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"routeId\": \"route123\",\n  \"name\": \"Bus 101\",\n  \"plateNumber\": \"CMU-1234\",\n  \"capacity\": 40,\n  \"status\": \"ACTIVE\",\n  \"locationLatitude\": 40.4432,\n  \"locationLongitude\": -79.9428\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Buses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses"
+              ]
+            },
+            "description": "Retrieves a list of all buses"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Buses by Route",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses?routeId=route123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses?routeId=route123"
+              ]
+            },
+            "description": "Retrieves buses for a specific route"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bus by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific bus"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Bus",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses",
+                ":id"
+              ]
+            },
+            "description": "Updates a bus's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Bus Name\",\n  \"plateNumber\": \"CMU-5678\",\n  \"capacity\": 45,\n  \"status\": \"ACTIVE\",\n  \"locationLatitude\": 40.4432,\n  \"locationLongitude\": -79.9428\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bus",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/buses/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "buses",
+                ":id"
+              ]
+            },
+            "description": "Deletes a bus"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing buses"
+    },
+    {
+      "name": "Bus Stops",
+      "item": [
+        {
+          "name": "Create Bus Stop",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops"
+              ]
+            },
+            "description": "Creates a new bus stop for a route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"routeId\": \"route123\",\n  \"name\": \"Main Campus\",\n  \"latitude\": 40.4432,\n  \"longitude\": -79.9428,\n  \"busLeft\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Bus Stops",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops"
+              ]
+            },
+            "description": "Retrieves a list of all bus stops"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bus Stops by Route",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops?routeId=route123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops?routeId=route123"
+              ]
+            },
+            "description": "Retrieves bus stops for a specific route"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bus Stop by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific bus stop"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Bus Stop",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops",
+                ":id"
+              ]
+            },
+            "description": "Updates a bus stop's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Stop Name\",\n  \"latitude\": 40.4435,\n  \"longitude\": -79.943,\n  \"busLeft\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bus Stop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/bus-stops/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "bus-stops",
+                ":id"
+              ]
+            },
+            "description": "Deletes a bus stop"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing bus stops"
+    },
+    {
+      "name": "Passengers",
+      "item": [
+        {
+          "name": "Create Passenger",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers"
+              ]
+            },
+            "description": "Registers a passenger on a route",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"routeId\": \"route123\",\n  \"busId\": \"bus123\",\n  \"nickname\": \"Student1\",\n  \"status\": \"WAITING\",\n  \"waitingLatitude\": 40.4432,\n  \"waitingLongitude\": -79.9428\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Passengers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers"
+              ]
+            },
+            "description": "Retrieves a list of all passengers"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Passengers by Route",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers?routeId=route123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers?routeId=route123"
+              ]
+            },
+            "description": "Retrieves passengers for a specific route"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Passengers by Bus",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers?busId=bus123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers?busId=bus123"
+              ]
+            },
+            "description": "Retrieves passengers for a specific bus"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Passenger by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers",
+                ":id"
+              ]
+            },
+            "description": "Retrieves details for a specific passenger"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Passenger",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers",
+                ":id"
+              ]
+            },
+            "description": "Updates a passenger's details",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"busId\": \"bus123\",\n  \"status\": \"BOARDED\",\n  \"onboardLatitude\": 40.4432,\n  \"onboardLongitude\": -79.9428\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Passenger",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/passengers/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "passengers",
+                ":id"
+              ]
+            },
+            "description": "Deletes a passenger record"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing passengers"
+    },
+    {
+      "name": "Live Tracking",
+      "item": [
+        {
+          "name": "Create Live Tracking Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/live-tracking",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "live-tracking"
+              ]
+            },
+            "description": "Creates a new live tracking update for a bus",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"busId\": \"bus123\",\n  \"routeId\": \"route123\",\n  \"passengerId\": \"passenger123\",\n  \"latitude\": 40.4432,\n  \"longitude\": -79.9428\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Live Tracking Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/live-tracking",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "live-tracking"
+              ]
+            },
+            "description": "Retrieves a list of all live tracking records"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Live Tracking by Bus",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/live-tracking?busId=bus123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "live-tracking?busId=bus123"
+              ]
+            },
+            "description": "Retrieves live tracking records for a specific bus"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Live Tracking by Route",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/live-tracking?routeId=route123",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "live-tracking?routeId=route123"
+              ]
+            },
+            "description": "Retrieves live tracking records for a specific route"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Live Tracking Record by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{dev-url}}/live-tracking/:id",
+              "host": [
+                "{{dev-url}}"
+              ],
+              "path": [
+                "live-tracking",
+                ":id"
+              ]
+            },
+            "description": "Retrieves a specific live tracking record"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for real-time bus tracking"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": {
+      "token": "{{auth_token}}"
+    }
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "dev-url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "prod-url",
+      "value": "https://cmu-bus-scheduling-system-az5v.vercel.app/api",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Y2I5ODY5MjZiZGE0YmE5NWM4NGRlNSIsIm5hbWUiOiJkZXJyaWNrIiwiZW1haWwiOiJkZXJyaWNraXJhZHVAZ21haWwuY29tIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNzM2MTUzNTU3fQ.bDsaWU5sic2C3n9KiNRUEF8LJB7-4sQRC_ahhUdkixY",
+      "type": "string"
+    }
+  ]
+}

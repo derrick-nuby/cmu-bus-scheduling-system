@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "8a6fd8a3-8475-4484-85b8-d0a9f7dca887",
+		"name": "CMU Bus Scheduling System",
+		"description": "A real-time bus tracking system designed to help users track the location of buses in real time. It aims to provide accurate and timely information about bus locations, making it easier for passengers and stakeholders to plan their journeys effectively.\n\nMy project bridges the gap between unreliable bus systems and real-time GPS tracking. By ensuring continuous location updates, it enhances the public transport experience, reduces delays, and provides valuable insights for both passengers and bus operators.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24842410"
+	},
+	"item": [
+		{
+			"name": "Organizations",
+			"item": [
+				{
+					"name": "Create Organization",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carnegie Mellon University\",\n    \"type\": \"COMPANY\",\n    \"domain\": \"cmu.edu\"\n}"
+						},
+						"url": "{{dev-url}}/organizations"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Organizations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/organizations"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/organizations/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Organization",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Carnegie Mellon University Updated\",\n    \"domain\": \"cmu.edu\"\n}"
+						},
+						"url": "{{dev-url}}/organizations/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Organization",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/organizations/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User Signup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cmu.edu\",\n    \"password\": \"password123\",\n    \"name\": \"Admin User\",\n    \"role\": \"SUPER_ADMIN\",\n    \"organizationId\": \"org123\"\n}"
+						},
+						"url": "{{dev-url}}/users/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cmu.edu\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": "{{dev-url}}/users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/users?organizationId=org123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "organizationId",
+									"value": "org123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/users/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated User Name\",\n    \"password\": \"newpassword123\",\n    \"role\": \"ORG_ADMIN\"\n}"
+						},
+						"url": "{{dev-url}}/users/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/users/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Routes",
+			"item": [
+				{
+					"name": "Create Route",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"organizationId\": \"org123\",\n    \"name\": \"Campus Shuttle\",\n    \"description\": \"Main campus shuttle route\",\n    \"code\": \"CS001\",\n    \"logo\": \"https://example.com/logo.png\"\n}"
+						},
+						"url": "{{dev-url}}/routes"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/routes?organizationId=org123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"routes"
+							],
+							"query": [
+								{
+									"key": "organizationId",
+									"value": "org123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/routes/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Route",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Campus Shuttle\",\n    \"description\": \"Updated main campus shuttle route\",\n    \"logo\": \"https://example.com/updated-logo.png\"\n}"
+						},
+						"url": "{{dev-url}}/routes/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Route",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/routes/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buses",
+			"item": [
+				{
+					"name": "Create Bus",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"routeId\": \"route123\",\n    \"name\": \"Shuttle Bus 1\",\n    \"plateNumber\": \"CMU-001\",\n    \"capacity\": 30,\n    \"status\": \"ACTIVE\",\n    \"locationLatitude\": 40.4432,\n    \"locationLongitude\": -79.9428\n}"
+						},
+						"url": "{{dev-url}}/buses"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Buses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/buses?routeId=route123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"buses"
+							],
+							"query": [
+								{
+									"key": "routeId",
+									"value": "route123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bus by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/buses/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bus",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Shuttle Bus 1\",\n    \"plateNumber\": \"CMU-001-UPD\",\n    \"capacity\": 35,\n    \"status\": \"INACTIVE\",\n    \"locationLatitude\": 40.4435,\n    \"locationLongitude\": -79.9430\n}"
+						},
+						"url": "{{dev-url}}/buses/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Bus",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/buses/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bus Stops",
+			"item": [
+				{
+					"name": "Create Bus Stop",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"routeId\": \"route123\",\n    \"name\": \"University Center\",\n    \"latitude\": 40.4432,\n    \"longitude\": -79.9428,\n    \"busLeft\": false\n}"
+						},
+						"url": "{{dev-url}}/bus-stops"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Bus Stops",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/bus-stops?routeId=route123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"bus-stops"
+							],
+							"query": [
+								{
+									"key": "routeId",
+									"value": "route123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bus Stop by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/bus-stops/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bus Stop",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated University Center\",\n    \"latitude\": 40.4435,\n    \"longitude\": -79.9430,\n    \"busLeft\": true\n}"
+						},
+						"url": "{{dev-url}}/bus-stops/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Bus Stop",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/bus-stops/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Passengers",
+			"item": [
+				{
+					"name": "Create Passenger",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"routeId\": \"route123\",\n    \"busId\": \"bus123\",\n    \"nickname\": \"Student1\",\n    \"status\": \"WAITING\",\n    \"waitingLatitude\": 40.4432,\n    \"waitingLongitude\": -79.9428\n}"
+						},
+						"url": "{{dev-url}}/passengers"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Passengers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/passengers?routeId=route123&busId=bus123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"passengers"
+							],
+							"query": [
+								{
+									"key": "routeId",
+									"value": "route123"
+								},
+								{
+									"key": "busId",
+									"value": "bus123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Passenger by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/passengers/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Passenger",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"busId\": \"bus456\",\n    \"status\": \"BOARDED\",\n    \"waitingLatitude\": 40.4435,\n    \"waitingLongitude\": -79.9430,\n    \"onboardLatitude\": 40.4432,\n    \"onboardLongitude\": -79.9428\n}"
+						},
+						"url": "{{dev-url}}/passengers/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Passenger",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{dev-url}}/passengers/:id"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Live Tracking",
+			"item": [
+				{
+					"name": "Create Live Tracking Record",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"busId\": \"bus123\",\n    \"routeId\": \"route123\",\n    \"passengerId\": \"passenger123\",\n    \"latitude\": 40.4432,\n    \"longitude\": -79.9428\n}"
+						},
+						"url": "{{dev-url}}/live-tracking"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Live Tracking Records",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{dev-url}}/live-tracking?busId=bus123&routeId=route123",
+							"host": [
+								"{{dev-url}}"
+							],
+							"path": [
+								"live-tracking"
+							],
+							"query": [
+								{
+									"key": "busId",
+									"value": "bus123"
+								},
+								{
+									"key": "routeId",
+									"value": "route123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Live Tracking Record by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{dev-url}}/live-tracking/:id"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Y2I5ODY5MjZiZGE0YmE5NWM4NGRlNSIsIm5hbWUiOiJkZXJyaWNrIiwiZW1haWwiOiJkZXJyaWNraXJhZHVAZ21haWwuY29tIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNzM2MTUzNTU3fQ.bDsaWU5sic2C3n9KiNRUEF8LJB7-4sQRC_ahhUdkixY"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "dev-url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "prod-url",
+			"value": "https://cmu-bus-scheduling-system-az5v.vercel.app/api",
+			"type": "string"
+		}
+	]
+}
