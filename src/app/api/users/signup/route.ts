@@ -22,6 +22,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid user role. Must be SUPER_ADMIN or ORG_ADMIN" }, { status: 400 });
     }
 
+    // Check if organization exists
+    if (organizationId) {
+      const organization = await prisma.organization.findUnique({
+        where: { id: organizationId },
+      });
+
+      if (!organization) {
+        return NextResponse.json({ error: "Organization does not exist" }, { status: 400 });
+      }
+    }
+
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },

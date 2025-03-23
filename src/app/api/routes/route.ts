@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { organizationId, name, description, code, logo } = body;
+    const { organizationId, name, description, logo } = body;
 
     // Validate required fields
     if (!organizationId || !name || !description) {
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     // Generate a unique code if not provided
-    const routeCode = code || generateUniqueId();
+    const routeCode = generateUniqueId();
 
     // Create the route
     const route = await prisma.route.create({
