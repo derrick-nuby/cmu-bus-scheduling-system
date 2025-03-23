@@ -1,0 +1,85 @@
+model Organization {
+  id         String    @id @default(cuid())
+  name       String
+  type       String
+  domain     String?
+  created_at DateTime  @default(now())
+  users      User[]
+  routes     Route[]
+}
+
+model User {
+  id              String    @id @default(cuid())
+  organization_id String?
+  email           String    @unique
+  password        String
+  name            String
+  role            String
+  oauth_provider  String?
+  oauth_id        String?
+  created_at      DateTime  @default(now())
+  organization    Organization? @relation(fields: [organization_id], references: [id])
+}
+
+model Route {
+  id             String    @id @default(cuid())
+  organization_id String
+  name           String
+  description    String
+  code           String    @unique
+  logo           String?
+  created_at     DateTime  @default(now())
+  organization   Organization @relation(fields: [organization_id], references: [id])
+  buses          Bus[]
+  busStops       BusStop[]
+}
+
+model Bus {
+  id           String    @id @default(cuid())
+  route_id     String
+  name         String
+  plate_number String
+  capacity     Int
+  location     String
+  status       String
+  route        Route     @relation(fields: [route_id], references: [id])
+}
+
+model BusStop {
+  id         String    @id @default(cuid())
+  route_id   String
+  name       String
+  latitude   Float
+  longitude  Float
+  bus_left   Boolean
+  created_at DateTime  @default(now())
+  route      Route     @relation(fields: [route_id], references: [id])
+}
+
+model Passenger {
+  id                String    @id @default(cuid())
+  route_id          String
+  bus_id            String
+  nickname          String
+  status            String
+  waiting_latitude  Float
+  waiting_longitude Float
+  onboard_latitude  Float
+  onboard_longitude Float
+  created_at        DateTime  @default(now())
+  route             Route     @relation(fields: [route_id], references: [id])
+  bus               Bus       @relation(fields: [bus_id], references: [id])
+}
+
+model BusLiveTracking {
+  id           String    @id @default(cuid())
+  bus_id       String
+  route_id     String
+  passenger_id String
+  latitude     Float
+  longitude    Float
+  updated_at   DateTime  @default(now())
+  bus          Bus       @relation(fields: [bus_id], references: [id])
+  route        Route     @relation(fields: [route_id], references: [id])
+  passenger    Passenger @relation(fields: [passenger_id], references: [id])
+}
