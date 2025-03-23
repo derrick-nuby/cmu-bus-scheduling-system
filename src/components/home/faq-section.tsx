@@ -1,5 +1,5 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { faqData } from "@/data/homepage"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { faqData } from "@/constants/faq";
 
 export function FaqSection() {
   return (
@@ -23,6 +23,6 @@ export function FaqSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
