@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +32,7 @@ interface ResetPasswordFormProps {
 }
 
 export default function ResetPasswordForm({ email, code }: ResetPasswordFormProps) {
+  const router = useRouter();
   const resetPasswordMutation = useResetPassword();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: zodResolver(resetPasswordSchema),
@@ -41,6 +43,10 @@ export default function ResetPasswordForm({ email, code }: ResetPasswordFormProp
       email,
       code,
       newPassword: data.newPassword,
+    }, {
+      onSuccess: () => {
+        router.push("/login");
+      },
     });
   };
 
