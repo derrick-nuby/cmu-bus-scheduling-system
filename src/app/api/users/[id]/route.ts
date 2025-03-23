@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import bcrypt from "bcrypt"
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-type RouteParams = Promise<{ id: string }>
+type RouteParams = Promise<{ id: string; }>;
 
 // Get a specific user
-export async function GET(req: Request, { params }: { params: RouteParams }) {
-  const resolvedParams = await params
+export async function GET(req: Request, { params }: { params: RouteParams; }) {
+  const resolvedParams = await params;
   try {
     const user = await prisma.user.findUnique({
       where: { id: resolvedParams.id },
@@ -21,43 +21,44 @@ export async function GET(req: Request, { params }: { params: RouteParams }) {
         oauthProvider: true,
         createdAt: true,
       },
-    })
+    });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 })
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user)
+    return NextResponse.json(user);
   } catch (error) {
-    console.error("Error fetching user:", error)
-    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 })
+    console.error("Error fetching user:", error);
+    return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 }
 
 // Update a user
-export async function PUT(req: Request, { params }: { params: RouteParams }) {
-  const resolvedParams = await params
+export async function PUT(req: Request, { params }: { params: RouteParams; }) {
+  const resolvedParams = await params;
   try {
-    const body = await req.json()
-    const { name, password, role } = body
+    const body = await req.json();
+    const { name, password, role } = body;
 
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { id: resolvedParams.id },
-    })
+    });
 
     if (!existingUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 })
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Prepare update data
-    const updateData: any = {}
-    if (name !== undefined) updateData.name = name
-    if (role !== undefined) updateData.role = role
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: any = {};
+    if (name !== undefined) updateData.name = name;
+    if (role !== undefined) updateData.role = role;
 
     // Hash password if provided
     if (password) {
-      updateData.password = await bcrypt.hash(password, 10)
+      updateData.password = await bcrypt.hash(password, 10);
     }
 
     const updatedUser = await prisma.user.update({
@@ -72,36 +73,36 @@ export async function PUT(req: Request, { params }: { params: RouteParams }) {
         oauthProvider: true,
         createdAt: true,
       },
-    })
+    });
 
-    return NextResponse.json(updatedUser)
+    return NextResponse.json(updatedUser);
   } catch (error) {
-    console.error("Error updating user:", error)
-    return NextResponse.json({ error: "Failed to update user" }, { status: 500 })
+    console.error("Error updating user:", error);
+    return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }
 
 // Delete a user
-export async function DELETE(req: Request, { params }: { params: RouteParams }) {
-  const resolvedParams = await params
+export async function DELETE(req: Request, { params }: { params: RouteParams; }) {
+  const resolvedParams = await params;
   try {
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { id: resolvedParams.id },
-    })
+    });
 
     if (!existingUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 })
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     await prisma.user.delete({
       where: { id: resolvedParams.id },
-    })
+    });
 
-    return NextResponse.json({ message: "User deleted successfully" }, { status: 200 })
+    return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting user:", error)
-    return NextResponse.json({ error: "Failed to delete user" }, { status: 500 })
+    console.error("Error deleting user:", error);
+    return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
   }
 }
 
