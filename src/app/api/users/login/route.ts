@@ -29,11 +29,11 @@ export async function POST(req: Request) {
       // Generate JWT token
       const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "24h" });
 
-      // Return user data without password
+      // Return user data without sensitive information
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password: _, ...userWithoutPassword } = user;
+      const { password: _, oauthProvider: __, oauthId: ___, ...safeUserData } = user;
       return NextResponse.json({
-        user: userWithoutPassword,
+        user: safeUserData,
         token,
       });
     }
@@ -60,9 +60,11 @@ export async function POST(req: Request) {
       // Generate JWT token
       const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "24h" });
 
-      // Return user data
+      // Return user data without sensitive information
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, oauthProvider: __, oauthId: ___, ...safeUserData } = user;
       return NextResponse.json({
-        user,
+        user: safeUserData,
         token,
       });
     } else {

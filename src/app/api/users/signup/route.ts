@@ -1,36 +1,21 @@
 import { NextResponse } from "next/server";
 import { PrismaClient, UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "@/lib/email/send-welcome-email";
 
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, password, name, role, organizationId, oauthProvider, oauthId } = body;
+    const { email, password, name, oauthProvider, oauthId } = body;
 
     // Validate required fields
-    if (!email || (!password && !oauthProvider) || !name || !role) {
+    if (!email || (!password && !oauthProvider) || !name) {
       return NextResponse.json(
-        { error: "Email, name, role, and either password or OAuth details are required" },
+        { error: "Email, name, and either password or OAuth details are required" },
         { status: 400 },
       );
-    }
-
-    // Validate user role
-    if (!Object.values(UserRole).includes(role as UserRole)) {
-      return NextResponse.json({ error: "Invalid user role. Must be SUPER_ADMIN or ORG_ADMIN" }, { status: 400 });
-    }
-
-    // Check if organization exists
-    if (organizationId) {
-      const organization = await prisma.organization.findUnique({
-        where: { id: organizationId },
-      });
-
-      if (!organization) {
-        return NextResponse.json({ error: "Organization does not exist" }, { status: 400 });
-      }
     }
 
     // Check if user already exists
@@ -48,14 +33,13 @@ export async function POST(req: Request) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    // Create user
+    // Create user with default role (ORG_ADMIN) but no organization yet
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name,
-        role: role as UserRole,
-        organizationId,
+        role: UserRole.ORG_ADMIN, // Default role
         oauthProvider,
         oauthId,
       },
@@ -65,10 +49,17 @@ export async function POST(req: Request) {
         name: true,
         role: true,
         organizationId: true,
-        oauthProvider: true,
         createdAt: true,
       },
     });
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail(name, email);
+    } catch (emailError) {
+      console.error("Error sending welcome email:", emailError);
+      // Continue with user creation even if email fails
+    }
 
     return NextResponse.json(user, { status: 201 });
   } catch (error) {

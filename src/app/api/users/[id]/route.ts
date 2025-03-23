@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -39,7 +38,7 @@ export async function PUT(req: Request, { params }: { params: RouteParams; }) {
   const resolvedParams = await params;
   try {
     const body = await req.json();
-    const { name, password, role } = body;
+    const { name, role } = body;
 
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
@@ -56,11 +55,6 @@ export async function PUT(req: Request, { params }: { params: RouteParams; }) {
     if (name !== undefined) updateData.name = name;
     if (role !== undefined) updateData.role = role;
 
-    // Hash password if provided
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
     const updatedUser = await prisma.user.update({
       where: { id: resolvedParams.id },
       data: updateData,
@@ -70,7 +64,6 @@ export async function PUT(req: Request, { params }: { params: RouteParams; }) {
         name: true,
         role: true,
         organizationId: true,
-        oauthProvider: true,
         createdAt: true,
       },
     });
